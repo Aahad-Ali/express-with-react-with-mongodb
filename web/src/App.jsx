@@ -94,7 +94,7 @@ function App() {
 
           getAllProducts();
 
-          setProducts(response.data.data);
+          // setProducts(response.data.data);
         })
         .catch((err) => {
           console.log("error: ", err);

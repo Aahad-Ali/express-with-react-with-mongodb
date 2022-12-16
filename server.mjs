@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 
 const app = express()
 const port = process.env.PORT || 5001;
-let mongodbURI =process.env.mongodbURI || 'mongodb+srv://dbuser:aahad123@cluster0.tpakwn6.mongodb.net/?retryWrites=true&w=majority';
+let mongodbURI =process.env.mongodbURI || 'mongodb+srv://aahad:aahadali@cluster0.tpakwn6.mongodb.net/?retryWrites=true&w=majority';
 
 let productSchema = new mongoose.Schema({
     name: { type: String, required: true },
