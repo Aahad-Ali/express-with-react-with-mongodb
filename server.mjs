@@ -1,31 +1,25 @@
 import express from 'express';
-import path from 'path';
 import cors from 'cors';
 import mongoose from 'mongoose';
 
 
 const app = express()
 const port = process.env.PORT || 5001;
-const mongodbURI = process.env.PORT || 'mongodb+srv://firstuse:firstusedb@atlascluster.wnfuytq.mongodb.net/?retryWrites=true&w=majority';
+let mongodbURI =process.env.mongodbURI || 'mongodb+srv://dbuser:aahad123@cluster0.tpakwn6.mongodb.net/?retryWrites=true&w=majority';
 
-
-//mongodb+srv://first-react-app-with-mongodb:Pccomputeri5#@atlascluster.wnfuytq.mongodb.net/?retryWrites=true&w=majority
-
+let productSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    price: Number,
+    description: String,
+    createdOn: { type: Date, default: Date.now }
+});
+const productModel = mongoose.model('products', productSchema);
 
 app.use(cors());
 app.use(express.json());
 
 let products = []; // TODO: connect with mongodb instead
 
-
-
-let productSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    description: String,
-    price: Number,
-    createdOn: { type: Date, default: Date.now }
-});
-const productModel = mongoose.model('products', productSchema);
 
 
 app.post('/product', (req, res) => {
@@ -73,7 +67,6 @@ app.post('/product', (req, res) => {
                 })
             }
         })
-
 })
 
 app.get('/products', (req, res) => {
@@ -183,7 +176,6 @@ app.listen(port, () => {
 
 
 
-
 /////////////////////////////////////////////////////////////////////////////////////////////////
 mongoose.connect(mongodbURI);
 
@@ -211,3 +203,4 @@ process.on('SIGINT', function () {/////this function will run jst before app is 
     });
 });
 ////////////////mongodb connected disconnected events///////////////////////////////////////////////
+
