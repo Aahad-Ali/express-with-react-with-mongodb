@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import React from "react";
+// import React from "react";
 import "./App.css";
 import axios from "axios";
 import { useFormik } from "formik";
@@ -21,12 +21,12 @@ function App() {
   const getAllProducts = async () => {
     try {
       const response = await axios.get(`${baseUrl}/products`);
-
       console.log("response: ", response.data);
-      setProducts(response.data.data);
+
+      setProducts(response.data.data.reverse());
     } catch (err) {
       console.log("error in getting all products: ", err);
-      alert("error in getting all products:");
+      // alert("error in getting all products:");
     }
   };
 
@@ -38,7 +38,7 @@ function App() {
       setLoadProduct(!loadProduct);
     } catch (err) {
       console.log("error in getting all products: ", err);
-      alert("error in getting all products:");
+      // alert("error in getting all products:");
     }
   };
 
@@ -91,10 +91,11 @@ function App() {
         })
         .then((response) => {
           console.log("response: ", response.data);
+          setLoadProduct(!loadProduct);
 
-          getAllProducts();
+          // getAllProducts();
 
-          setProducts(response.data.data);
+          // setProducts(response.data.data);
         })
         .catch((err) => {
           console.log("error: ", err);
@@ -129,10 +130,10 @@ function App() {
 
     onSubmit: (values) => {
       console.log("values: ", values);
-      getAllProducts();
+      // getAllProducts();
 
       axios
-        .put(`${baseUrl}/product/${editingProduct.id}`, {
+        .put(`${baseUrl}/product/${editingProduct._id}`, {
           name: values.productName,
           description: values.productDescription,
           price: values.productPrice,
@@ -140,7 +141,8 @@ function App() {
         .then((response) => {
           console.log("response: ", response.data);
 
-          getAllProducts();
+          setLoadProduct(!loadProduct)
+
           setIsEditMode(false);
 
           // setProducts(response.data.data);
@@ -215,7 +217,7 @@ function App() {
             value={myFormik.values.productDescription}
             onChange={myFormik.handleChange}
           />
-          {myFormik.touched.productName &&
+          {myFormik.touched.productDescription &&
           Boolean(myFormik.errors.productDescription) ? (
             <span style={{ color: "red" }}>
               {myFormik.errors.productDescription}
@@ -230,7 +232,7 @@ function App() {
             value={myFormik.values.productPrice}
             onChange={myFormik.handleChange}
           />
-          {myFormik.touched.productName &&
+          {myFormik.touched.productPrice &&
           Boolean(myFormik.errors.productPrice) ? (
             <span style={{ color: "red" }}>{myFormik.errors.productPrice}</span>
           ) : null}
@@ -246,18 +248,18 @@ function App() {
           {products.map((eachProduct, i) => (
             <div
               className="container"
-              key={i}
+              key={eachProduct._id}
               style={{ padding: "20px", margin: "10px" }}
             >
               <div className="card">
                 <div className="card-body">
                   <h1 className="card-title">{eachProduct.name}</h1>
                   <p className="card-text">{eachProduct.description}</p>
-                  <p className="card-title">{eachProduct.id}</p>
+                  <p className="card-title">{eachProduct._id}</p>
                   <h5 className="card-title">{eachProduct.price}</h5>
                   <button
                     onClick={() => {
-                      deleteProduct(eachProduct.id);
+                      deleteProduct(eachProduct._id);
                     }}
                   >
                     Delete
@@ -270,7 +272,7 @@ function App() {
                     Edit
                   </button>
 
-                  {isEditMode && editingProduct.id === eachProduct.id ? (
+                  {isEditMode && editingProduct._id === eachProduct._id ? (
                     <div>
                       <form onSubmit={updateFormik.handleSubmit}>
                         <input
@@ -294,7 +296,7 @@ function App() {
                           value={updateFormik.values.productDescription}
                           onChange={updateFormik.handleChange}
                         />
-                        {updateFormik.touched.productName &&
+                        {updateFormik.touched.productDescription &&
                         Boolean(updateFormik.errors.productDescription) ? (
                           <span style={{ color: "red" }}>
                             {updateFormik.errors.productDescription}
@@ -309,7 +311,7 @@ function App() {
                           value={updateFormik.values.productPrice}
                           onChange={updateFormik.handleChange}
                         />
-                        {updateFormik.touched.productName &&
+                        {updateFormik.touched.productPrice &&
                         Boolean(updateFormik.errors.productPrice) ? (
                           <span style={{ color: "red" }}>
                             {updateFormik.errors.productPrice}
