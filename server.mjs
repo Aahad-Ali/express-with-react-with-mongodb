@@ -4,8 +4,10 @@ import mongoose from 'mongoose';
 
 
 const app = express()
+
 const port = process.env.PORT || 5002;
 const mongodbURI = process.env.mongodbURI || 'mongodb+srv://firstdb:dbfirst@cluster0.0t9dcns.mongodb.net/?retryWrites=true&w=majority';
+
 
 
 
