@@ -4,23 +4,21 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 
 const app = express()
-const port = process.env.PORT || 5005;
-const mongodbURI = process.env.mongodbURI || "mongodb+srv://firstdb:dbfirst@cluster0.gq9n2zr.mongodb.net/abcdatabase?retryWrites=true&w=majority";
-
-app.use(cors());
-app.use(express.json());
-
-let products = []; // TODO: connect with mongodb instead
+const port = process.env.PORT || 5001;
+let mongodbURI =process.env.mongodbURI || 'mongodb+srv://dbuser:aahad123@cluster0.tpakwn6.mongodb.net/?retryWrites=true&w=majority';
 
 let productSchema = new mongoose.Schema({
-    name: { type: String, required: true },
+    name:  { type: String, required: true },
     price: Number,
     description: String,
     createdOn: { type: Date, default: Date.now }
 });
 const productModel = mongoose.model('products', productSchema);
 
+app.use(cors());
+app.use(express.json());
 
+let products = []; // TODO: connect with mongodb instead
 
 
 
@@ -71,19 +69,10 @@ app.post('/product', (req, res) => {
 })
 
 app.get('/products', (req, res) => {
-
-    productModel.find({}, (err, data) => {
-        if (!err) {
-            res.send({
-                message: "got all products successfully",
-                data: data
-            })
-        } else {
-            res.status(500).send({
-                message: "server error"
-            })
-        }
-    });
+    res.send({
+        message: "got all products successfully",
+        data: products
+    })
 })
 
 app.get('/product/:id', (req, res) => {
@@ -132,15 +121,13 @@ app.delete('/product/:id', (req, res) => {
                 message: "server error"
             })
         }
-    });
-
-
-
-
-
-
-
-
+    }
+    if (isFound === false) {
+        res.status(404)
+        res.send({
+            message: "delete fail: product not found"
+        });
+    }
 })
 
 app.put('/product/:id', async (req, res) => {
@@ -172,7 +159,13 @@ app.put('/product/:id', async (req, res) => {
             { new: true }
         ).exec();
 
-        console.log('updated: ', data);
+    let isFound = false;
+    for (let i = 0; i < products.length; i++) {
+        if (products[i].id === id) {
+
+            products[i].name = body.name;
+            products[i].price = body.price;
+            products[i].description = body.description;
 
         res.send({
             message: "product modified successfully"
@@ -188,6 +181,8 @@ app.put('/product/:id', async (req, res) => {
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 mongoose.connect(mongodbURI);
@@ -215,3 +210,4 @@ process.on('SIGINT', function () {/////this function will run jst before app is 
     });
 });
 ////////////////mongodb connected disconnected events///////////////////////////////////////////////
+
