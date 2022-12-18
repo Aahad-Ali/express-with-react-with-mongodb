@@ -198,7 +198,7 @@ mongoose.connection.on('disconnected', function () {//disconnected
 });
 
 mongoose.connection.on('error', function (err) {//any error
-    console.log('Mongoose connection error: ', err);
+    console.log('Mongooses connection error: ', err);
     process.exit(1);
 });
 
